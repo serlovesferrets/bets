@@ -35,11 +35,13 @@ Event 1 is terminated with the result X; bettor 1 made a bet of 80 € on result
 (earn) while bettor 2 made a bet of 70€ on result X (loss); the X quote was
 2.70. The list displays the following data:
 
-Name Amount Result Earn/Loss
+| Name    | Amount | Result | Earn / Loss |
+| :-----: | :----: | :----: | :---------: |
+| bettor1 | 80     | 1      | +80         |
+| bettor2 | 70     | X      | -119        |
 
-bettor1 80 1 +80 
-bettor2 70 X -119 
-Budget: -39€ 
+Budget: -39€
+
 (the organization has a loss of 39€)
 
 The loss is given by: amount * quote - amount
