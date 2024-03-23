@@ -20,6 +20,7 @@ public class Bet implements Serializable {
 
     public Bet(String str) throws DateTooLongException, TimeTooLongException {
         var parts = str.split(",");
+
         number = Integer.parseInt(parts[0]);
         eventName = parts[1];
         date = BetDate.parseDate(parts[2]);

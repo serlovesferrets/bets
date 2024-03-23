@@ -7,13 +7,14 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 import org.bets.exceptions.DateTooLongException;
+import org.bets.exceptions.TimeTooLongException;
 import org.bets.exceptions.TooLongException;
 
 public class App {
     static final String fileName = "amounts.dat";
     static final File file = new File(fileName);
 
-    public static void main(String[] args) throws TooLongException, IOException, DateTooLongException {
+    public static void main(String[] args) throws TooLongException, IOException, DateTooLongException, TimeTooLongException {
         if (args.length > 0 && args[0].trim().equalsIgnoreCase("clean")) {
             file.delete();
             return;
@@ -23,6 +24,7 @@ public class App {
                 .number(2000)
                 .eventName("Bordello")
                 .date("2024", "03", "22")
+                .time("12", "15")
                 .caseFirst(111.6f)
                 .caseEven(220f)
                 .caseSecond(225f);

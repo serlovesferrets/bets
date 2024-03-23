@@ -35,6 +35,6 @@ public class BetTime {
     }
 
     public String prettyString() {
-        return "%s %s".formatted(hour, minutes);
+        return "%s:%s".formatted(hour, minutes);
     }
 }
