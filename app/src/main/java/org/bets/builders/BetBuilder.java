@@ -27,13 +27,23 @@ public class BetBuilder {
         return this;
     }
 
-    public BetBuilder date(String year, String month, String date) throws DateTooLongException {
+    public BetBuilder date(String year, String month, String date) throws DateFormatException {
         this.date = new BetDate(year, month, date);
         return this;
     }
 
-    public BetBuilder time(String hour, String minutes) throws TimeTooLongException {
+    public BetBuilder date(BetDate date) {
+        this.date = date;
+        return this;
+    }
+
+    public BetBuilder time(String hour, String minutes) throws TimeFormatException {
         this.time = new BetTime(hour, minutes);
+        return this;
+    }
+
+    public BetBuilder time(BetTime time) {
+        this.time = time;
         return this;
     }
 
