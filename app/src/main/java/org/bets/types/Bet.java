@@ -1,9 +1,11 @@
-package org.bets;
+package org.bets.types;
 
 import java.io.Serializable;
 
-import org.bets.exceptions.DateTooLongException;
-import org.bets.exceptions.TimeTooLongException;
+import org.bets.exceptions.DateFormatException;
+import org.bets.exceptions.TimeFormatException;
+import org.bets.types.parts.BetDate;
+import org.bets.types.parts.BetTime;
 
 public class Bet implements Serializable {
     public Bet(int number, String eventName,
@@ -18,7 +20,7 @@ public class Bet implements Serializable {
         this.caseSecond = caseSecond;
     }
 
-    public Bet(String str) throws DateTooLongException, TimeTooLongException {
+    public Bet(String str) throws DateFormatException, TimeFormatException {
         var parts = str.split(",");
 
         number = Integer.parseInt(parts[0]);

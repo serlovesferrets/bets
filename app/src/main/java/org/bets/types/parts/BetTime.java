@@ -1,13 +1,13 @@
-package org.bets;
+package org.bets.types.parts;
 
-import org.bets.exceptions.TimeTooLongException;
+import org.bets.exceptions.TimeFormatException;
 
 public class BetTime {
     private String hour, minutes;
 
-    public BetTime(String hour, String minutes) throws TimeTooLongException {
+    public BetTime(String hour, String minutes) throws TimeFormatException {
         if (hour.length() != 2 || minutes.length() != 2) {
-            throw new TimeTooLongException("Errore nella lunghezza degli elementi! Segui il formato HHMM!");
+            throw new TimeFormatException("Errore nella lunghezza degli elementi! Segui il formato HHMM!");
         }
 
         this.hour = hour;
@@ -22,7 +22,7 @@ public class BetTime {
         return minutes;
     }
 
-    public static BetTime parseTime(String time) throws TimeTooLongException {
+    public static BetTime parseTime(String time) throws TimeFormatException {
         var hour = time.substring(0, 2);
         var minutes = time.substring(2);
 

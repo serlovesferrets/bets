@@ -1,6 +1,9 @@
-package org.bets;
+package org.bets.builders;
 
 import org.bets.exceptions.*;
+import org.bets.types.Bet;
+import org.bets.types.parts.BetDate;
+import org.bets.types.parts.BetTime;
 
 public class BetBuilder {
     private int number;
@@ -27,13 +30,23 @@ public class BetBuilder {
         return this;
     }
 
-    public BetBuilder date(String year, String month, String date) throws DateTooLongException {
+    public BetBuilder date(String year, String month, String date) throws DateFormatException {
         this.date = new BetDate(year, month, date);
         return this;
     }
 
-    public BetBuilder time(String hour, String minutes) throws TimeTooLongException {
+    public BetBuilder date(BetDate date) {
+        this.date = date;
+        return this;
+    }
+
+    public BetBuilder time(String hour, String minutes) throws TimeFormatException {
         this.time = new BetTime(hour, minutes);
+        return this;
+    }
+
+    public BetBuilder time(BetTime time) {
+        this.time = time;
         return this;
     }
 

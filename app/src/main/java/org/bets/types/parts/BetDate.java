@@ -1,13 +1,13 @@
-package org.bets;
+package org.bets.types.parts;
 
-import org.bets.exceptions.DateTooLongException;
+import org.bets.exceptions.DateFormatException;
 
 public class BetDate {
     private String year, month, day;
 
-    public BetDate(String year, String month, String day) throws DateTooLongException {
+    public BetDate(String year, String month, String day) throws DateFormatException {
         if (year.length() != 4 || month.length() != 2 || day.length() != 2) {
-            throw new DateTooLongException("Errore nella lunghezza degli elementi! Segui il formato YYYYMMDD!");
+            throw new DateFormatException("Errore nella lunghezza degli elementi! Segui il formato YYYYMMDD!");
         }
 
         this.year = year;
@@ -27,7 +27,7 @@ public class BetDate {
         return day;
     }
 
-    public static BetDate parseDate(String date) throws DateTooLongException {
+    public static BetDate parseDate(String date) throws DateFormatException {
         var year = date.substring(0, 4);
         var month = date.substring(4, 6);
         var day = date.substring(6);
