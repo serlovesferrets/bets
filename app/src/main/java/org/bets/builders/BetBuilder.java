@@ -6,11 +6,12 @@ import org.bets.types.parts.BetDate;
 import org.bets.types.parts.BetTime;
 
 public class BetBuilder {
-    private int number;
+    // reference types so they can be nullable
+    private Integer number;
     private String eventName;
     private BetDate date;
     private BetTime time;
-    private float caseFirst, caseEven, caseSecond;
+    private Float caseFirst, caseEven, caseSecond;
 
     public BetBuilder number(int number) throws NumberTooLongException {
         if (number > 99999) {
@@ -75,14 +76,37 @@ public class BetBuilder {
         return this;
     }
 
-    public Bet build() {
-        return new Bet(
-                number,
-                eventName,
-                date,
-                time,
-                caseFirst,
-                caseEven,
-                caseSecond);
+    public Bet build() throws MissingBuilderFieldException {
+        if (number == null || eventName == null || date == null || time == null
+                || caseFirst == null || caseEven == null
+                || caseSecond == null) {
+            throw new MissingBuilderFieldException("""
+                                  One or more fields was null! Status:
+                                  - number: %d,
+                                  - eventName: %s,
+                                  - date: %s,
+                                  - time: %s,
+                                  - caseFirst: %.2f,
+                                  - caseEven: %.2f,
+                                  - caseSecond: %.2f
+                    """.formatted(number, eventName, date.toString(),
+                    time.toString(), caseFirst, caseEven, caseSecond));
+        }
+        BetBuilder builder = null;
+        try {
+            builder = new BetBuilder()
+                    .number(number)
+                    .eventName(eventName)
+                    .date(date)
+                    .time(time)
+                    .caseFirst(caseFirst)
+                    .caseEven(caseEven)
+                    .caseSecond(caseSecond);
+        } catch (AmountTooLongException | EventNameTooLongException | NumberTooLongException e) {
+            // This will literally never happen
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return builder.build();
     }
 }

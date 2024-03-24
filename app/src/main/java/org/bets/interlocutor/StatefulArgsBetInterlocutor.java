@@ -23,6 +23,8 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
         caseSecondStr = args[7];
     }
 
+    private final BetBuilder builder = new BetBuilder();
+
     private final String numberStr;
     private final String eventNameStr;
     private final String dateStr;
@@ -31,16 +33,9 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
     private final String caseEvenStr;
     private final String caseSecondStr;
 
-    // Using reference types so they can be nullable instead of having zero values
-    private Integer number;
-    private String eventName;
-    private BetDate date;
-    private BetTime time;
-    private Float caseFirst, caseEven, caseSecond;
-
     @Override
     public StatefulArgsBetInterlocutor askDate() throws DateFormatException {
-        date = BetDate.parseDate(dateStr);
+        builder.date(BetDate.parseDate(dateStr));
         return this;
     }
 
@@ -51,7 +46,8 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 5! (Caso 1)"
                             .formatted(caseFirstStr.length()));
         }
-        caseFirst = Float.parseFloat(caseFirstStr);
+
+        builder.caseFirst(Float.parseFloat(caseFirstStr));
         return this;
     }
 
@@ -62,7 +58,7 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 5! (Caso X)"
                             .formatted(caseFirstStr.length()));
         }
-        caseEven = Float.parseFloat(caseEvenStr);
+        builder.caseEven(Float.parseFloat(caseEvenStr));
         return this;
     }
 
@@ -73,7 +69,7 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 5! (Caso 2)"
                             .formatted(caseFirstStr.length()));
         }
-        caseSecond = Float.parseFloat(caseSecondStr);
+        builder.caseSecond(Float.parseFloat(caseSecondStr));
         return this;
     }
 
@@ -84,7 +80,7 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 20! (nome evento)"
                             .formatted(eventNameStr.length()));
         }
-        eventName = eventNameStr;
+        builder.eventName(eventNameStr);
         return this;
     }
 
@@ -96,49 +92,18 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
                             .formatted(numberStr.length()));
         }
 
-        number = Integer.parseInt(numberStr);
+        builder.number(Integer.parseInt(numberStr));
         return this;
     }
 
     @Override
     public StatefulArgsBetInterlocutor askTime() throws TimeFormatException {
-        time = BetTime.parseTime(timeStr);
+        builder.time(BetTime.parseTime(timeStr));
         return this;
     }
 
     @Override
     public Bet build() throws MissingBuilderFieldException {
-        if (number == null || eventName == null || date == null || time == null
-                || caseFirst == null || caseEven == null
-                || caseSecond == null) {
-            throw new MissingBuilderFieldException("""
-                                  One or more fields was null! Status:
-                                  - number: %d,
-                                  - eventName: %s,
-                                  - date: %s,
-                                  - time: %s,
-                                  - caseFirst: %.2f,
-                                  - caseEven: %.2f,
-                                  - caseSecond: %.2f
-                    """.formatted(number, eventName, date.toString(),
-                    time.toString(), caseFirst, caseEven, caseSecond));
-        }
-        BetBuilder builder = null;
-        try {
-            builder = new BetBuilder()
-                    .number(number)
-                    .eventName(eventName)
-                    .date(date)
-                    .time(time)
-                    .caseFirst(caseFirst)
-                    .caseEven(caseEven)
-                    .caseSecond(caseSecond);
-        } catch (AmountTooLongException | EventNameTooLongException | NumberTooLongException e) {
-            // This will literally never happen
-            e.printStackTrace();
-            System.exit(1);
-        }
         return builder.build();
     }
-
 }

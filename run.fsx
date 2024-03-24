@@ -19,17 +19,17 @@ let bets =
       [ "3698"; "sixth-event"; "09012023"; "1430"; "400"; "350"; "100" ] ]
 
 
-let addData args =
+let addBetData args =
     let join = String.concat " "
 
     cli {
         Shell BASH
-        Command $"gradle run --args='add {join args}'"
+        Command $"gradle run --args='add-bet {join args}'"
     }
     |> Command.execute
     |> Output.toText
 
-let cleanData () =
+let cleanBetData () =
     cli {
         Shell BASH
         Command "gradle run --args='clean'"
@@ -49,10 +49,10 @@ let showBets () =
 
 let result =
     match command.ToLower() with
-    | "add-single" -> addData bets[0]
-    | "add" -> bets |> List.map addData |> String.concat "\n---\n"
+    | "add-single-bet" -> addBetData bets[0]
+    | "add-bet" -> bets |> List.map addBetData |> String.concat "\n---\n"
     | "show-bets" -> showBets ()
-    | "clean" -> cleanData ()
+    | "clean-bets" -> cleanBetData ()
     | _ -> failwith "Comando non riconosciuto!"
 
 printfn $"{result}"

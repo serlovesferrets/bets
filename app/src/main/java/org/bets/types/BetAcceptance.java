@@ -1,6 +1,7 @@
 package org.bets.types;
 
 public class BetAcceptance {
+    private int betNumber;
     private String bettorName;
     private int betAmount;
     private BetResult result;
@@ -17,18 +18,23 @@ public class BetAcceptance {
         return result;
     }
 
-    public BetAcceptance(String bettorName, Integer betAmount, BetResult result) {
+    public int getBetNumber() {
+        return betNumber;
+    }
+
+    public BetAcceptance(int betNumber, String bettorName, int betAmount, BetResult result) {
+        this.betNumber = betNumber;
         this.bettorName = bettorName;
         this.betAmount = betAmount;
         this.result = result;
     }
 
     public String serialized() {
-        return "%s,%d,%s".formatted(getBettorName(), getBetAmount(), getResult());
+        return "%d,%s,%d,%s".formatted(getBetNumber(), getBettorName(), getBetAmount(), getResult());
     }
 
     @Override
     public String toString() {
-        return "Bet by %s, worth $%d, status: %s".formatted(bettorName, betAmount, result);
+        return "Bet #%d by %s, worth $%d, status: %s".formatted(betNumber, bettorName, betAmount, result);
     }
 }

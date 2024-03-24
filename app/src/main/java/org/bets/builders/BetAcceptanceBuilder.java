@@ -5,9 +5,15 @@ import org.bets.types.BetAcceptance;
 import org.bets.types.BetResult;
 
 public class BetAcceptanceBuilder {
+    private Integer betNumber;
     private String bettorName;
     private Integer betAmount;
     private BetResult result;
+
+    public BetAcceptanceBuilder askBetNumber(int betNumber) {
+        this.betNumber = betNumber;
+        return this;
+    }
 
     public BetAcceptanceBuilder askBettorName(String bettorName) throws BettorNameTooLongException {
         if (bettorName.length() > 15) {
@@ -54,6 +60,6 @@ public class BetAcceptanceBuilder {
             throw new MissingBuilderFieldException(message);
         }
 
-        return new BetAcceptance(bettorName, betAmount, result);
+        return new BetAcceptance(betNumber, bettorName, betAmount, result);
     }
 }

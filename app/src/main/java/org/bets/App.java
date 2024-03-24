@@ -73,7 +73,7 @@ public class App {
             return;
         }
 
-        if (opt.equals("add")) {
+        if (opt.equals("add-bet")) {
             addBet(args);
             return;
         }
