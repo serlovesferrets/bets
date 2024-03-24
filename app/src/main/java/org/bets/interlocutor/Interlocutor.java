@@ -1,6 +1,6 @@
 package org.bets.interlocutor;
 
-import org.bets.Bet;
+import org.bets.types.Bet;
 import org.bets.exceptions.*;
 
 /* Using an interface as i ~~can't get gradle run to use stdin for input~~

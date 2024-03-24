@@ -1,15 +1,15 @@
 package org.bets.interlocutor;
 
-import org.bets.Bet;
-import org.bets.BetBuilder;
-import org.bets.BetDate;
-import org.bets.BetTime;
+import org.bets.builders.BetBuilder;
 import org.bets.exceptions.AmountTooLongException;
 import org.bets.exceptions.DateFormatException;
 import org.bets.exceptions.EventNameTooLongException;
 import org.bets.exceptions.MissingBuilderFieldException;
 import org.bets.exceptions.NumberTooLongException;
 import org.bets.exceptions.TimeFormatException;
+import org.bets.types.Bet;
+import org.bets.types.parts.BetDate;
+import org.bets.types.parts.BetTime;
 
 public class StatefulArgsInterlocutor implements Interlocutor<StatefulArgsInterlocutor> {
     public StatefulArgsInterlocutor(String[] args) throws DateFormatException, TimeFormatException {

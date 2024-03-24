@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 import org.bets.exceptions.*;
 import org.bets.interlocutor.StatefulArgsInterlocutor;
+import org.bets.types.Bet;
 
 public class App {
     static final String fileName = "betting.dat";

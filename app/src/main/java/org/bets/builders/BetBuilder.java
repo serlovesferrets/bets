@@ -1,6 +1,9 @@
-package org.bets;
+package org.bets.builders;
 
 import org.bets.exceptions.*;
+import org.bets.types.Bet;
+import org.bets.types.parts.BetDate;
+import org.bets.types.parts.BetTime;
 
 public class BetBuilder {
     private int number;

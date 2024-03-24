@@ -1,9 +1,11 @@
-package org.bets.bets;
+package org.bets.types;
 
 import java.io.Serializable;
 
 import org.bets.exceptions.DateFormatException;
 import org.bets.exceptions.TimeFormatException;
+import org.bets.types.parts.BetDate;
+import org.bets.types.parts.BetTime;
 
 public class Bet implements Serializable {
     public Bet(int number, String eventName,
