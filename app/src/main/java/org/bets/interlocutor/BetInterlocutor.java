@@ -17,7 +17,7 @@ import org.bets.exceptions.*;
  * the interface; this also allows the builder to preserve its type on inheritance
  * (see https://www.baeldung.com/java-builder-pattern-inheritance#solution-with-generics)
  */
-public interface Interlocutor<T extends Interlocutor<T>> {
+public interface BetInterlocutor<T extends BetInterlocutor<T>> {
     T askNumber() throws NumberTooLongException;
 
     T askName() throws EventNameTooLongException;

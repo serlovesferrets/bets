@@ -11,8 +11,8 @@ import org.bets.types.Bet;
 import org.bets.types.parts.BetDate;
 import org.bets.types.parts.BetTime;
 
-public class StatefulArgsInterlocutor implements Interlocutor<StatefulArgsInterlocutor> {
-    public StatefulArgsInterlocutor(String[] args) throws DateFormatException, TimeFormatException {
+public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgsBetInterlocutor> {
+    public StatefulArgsBetInterlocutor(String[] args) throws DateFormatException, TimeFormatException {
         // index 0 is the opt
         numberStr = args[1];
         eventNameStr = args[2];
@@ -39,13 +39,13 @@ public class StatefulArgsInterlocutor implements Interlocutor<StatefulArgsInterl
     private Float caseFirst, caseEven, caseSecond;
 
     @Override
-    public StatefulArgsInterlocutor askDate() throws DateFormatException {
+    public StatefulArgsBetInterlocutor askDate() throws DateFormatException {
         date = BetDate.parseDate(dateStr);
         return this;
     }
 
     @Override
-    public StatefulArgsInterlocutor askFirstCase() throws AmountTooLongException, NumberFormatException {
+    public StatefulArgsBetInterlocutor askFirstCase() throws AmountTooLongException, NumberFormatException {
         if (caseFirstStr.length() > 5) {
             throw new AmountTooLongException(
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 5! (Caso 1)"
@@ -56,7 +56,7 @@ public class StatefulArgsInterlocutor implements Interlocutor<StatefulArgsInterl
     }
 
     @Override
-    public StatefulArgsInterlocutor askEvenCase() throws AmountTooLongException, NumberFormatException {
+    public StatefulArgsBetInterlocutor askEvenCase() throws AmountTooLongException, NumberFormatException {
         if (caseEvenStr.length() > 5) {
             throw new AmountTooLongException(
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 5! (Caso X)"
@@ -67,7 +67,7 @@ public class StatefulArgsInterlocutor implements Interlocutor<StatefulArgsInterl
     }
 
     @Override
-    public StatefulArgsInterlocutor askSecondCase() throws AmountTooLongException, NumberFormatException {
+    public StatefulArgsBetInterlocutor askSecondCase() throws AmountTooLongException, NumberFormatException {
         if (caseSecondStr.length() > 5) {
             throw new AmountTooLongException(
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 5! (Caso 2)"
@@ -78,7 +78,7 @@ public class StatefulArgsInterlocutor implements Interlocutor<StatefulArgsInterl
     }
 
     @Override
-    public StatefulArgsInterlocutor askName() throws EventNameTooLongException {
+    public StatefulArgsBetInterlocutor askName() throws EventNameTooLongException {
         if (eventNameStr.length() > 20) {
             throw new EventNameTooLongException(
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 20! (nome evento)"
@@ -89,7 +89,7 @@ public class StatefulArgsInterlocutor implements Interlocutor<StatefulArgsInterl
     }
 
     @Override
-    public StatefulArgsInterlocutor askNumber() throws NumberTooLongException, NumberFormatException {
+    public StatefulArgsBetInterlocutor askNumber() throws NumberTooLongException, NumberFormatException {
         if (numberStr.length() > 5) {
             throw new NumberTooLongException(
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 5! (Caso 2)"
@@ -101,7 +101,7 @@ public class StatefulArgsInterlocutor implements Interlocutor<StatefulArgsInterl
     }
 
     @Override
-    public StatefulArgsInterlocutor askTime() throws TimeFormatException {
+    public StatefulArgsBetInterlocutor askTime() throws TimeFormatException {
         time = BetTime.parseTime(timeStr);
         return this;
     }
