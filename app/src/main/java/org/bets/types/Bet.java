@@ -1,107 +1,57 @@
 package org.bets.types;
 
-import java.io.Serializable;
+public class Bet {
+    private int betNumber;
+    private String bettorName;
+    private int betAmount;
+    private BetResult result;
 
-import org.bets.exceptions.DateFormatException;
-import org.bets.exceptions.TimeFormatException;
-import org.bets.types.parts.BetDate;
-import org.bets.types.parts.BetTime;
-
-public class Bet implements Serializable {
-    public Bet(int number, String eventName,
-            BetDate date, BetTime time, float caseFirst,
-            float caseEven, float caseSecond) {
-        this.number = number;
-        this.eventName = eventName;
-        this.date = date;
-        this.time = time;
-        this.caseFirst = caseFirst;
-        this.caseEven = caseEven;
-        this.caseSecond = caseSecond;
+    public String getBettorName() {
+        return bettorName;
     }
 
-    public Bet(String str) throws DateFormatException, TimeFormatException {
-        var parts = str.split(",");
-
-        number = Integer.parseInt(parts[0]);
-        eventName = parts[1];
-        date = BetDate.parseDate(parts[2]);
-        time = BetTime.parseTime(parts[3]);
-        caseFirst = Float.parseFloat(parts[4]);
-        caseEven = Float.parseFloat(parts[5]);
-        caseSecond = Float.parseFloat(parts[6]);
+    public int getBetAmount() {
+        return betAmount;
     }
 
-    private int number;
-    private String eventName;
-    private BetDate date;
-    private BetTime time;
-    private float caseFirst, caseEven, caseSecond;
-
-    public int getNumber() {
-        return number;
+    public BetResult getResult() {
+        return result;
     }
 
-    public String getEventName() {
-        return eventName;
+    public int getBetNumber() {
+        return betNumber;
     }
 
-    public BetDate getDate() {
-        return date;
+    public Bet(int betNumber, String bettorName, int betAmount, BetResult result) {
+        this.betNumber = betNumber;
+        this.bettorName = bettorName;
+        this.betAmount = betAmount;
+        this.result = result;
     }
 
-    public BetTime getTime() {
-        return time;
+    public Bet(String serializedBet) {
+        var parts = serializedBet.split(",");
+
+        betNumber = Integer.parseInt(parts[0]);
+        bettorName = parts[1];
+        betAmount = Integer.parseInt(parts[2]);
+
+        final var result = switch (parts[3].charAt(0)) {
+            case 'x', 'X' -> BetResult.EVEN;
+            case '1' -> BetResult.ONE;
+            case '2' -> BetResult.TWO;
+            default -> throw new IllegalArgumentException("Invalid argument " + parts[3].charAt(0) + "!!");
+        };
+
+        this.result = result;
     }
 
-    public float getCaseFirst() {
-        return caseFirst;
-    }
-
-    public float getCaseEven() {
-        return caseEven;
-    }
-
-    public float getCaseSecond() {
-        return caseSecond;
+    public String serialized() {
+        return "%d,%s,%d,%s".formatted(getBetNumber(), getBettorName(), getBetAmount(), getResult());
     }
 
     @Override
     public String toString() {
-        return """
-                %s #%d, del %s, %s:
-                - 1: %.2f
-                - X: %.2f
-                - 2: %.2f
-                """
-                .formatted(
-                        getEventName(),
-                        getNumber(),
-                        getDate().prettyString(),
-                        getTime().prettyString(),
-                        getCaseFirst(),
-                        getCaseEven(),
-                        getCaseSecond());
-
-    }
-
-    public String serialized() {
-        final var separator = ",";
-        return new StringBuilder()
-                .append(getNumber())
-                .append(separator)
-                .append(getEventName())
-                .append(separator)
-                .append(getDate())
-                .append(separator)
-                .append(getTime())
-                .append(separator)
-                .append(getCaseFirst())
-                .append(separator)
-                .append(getCaseEven())
-                .append(separator)
-                .append(getCaseSecond())
-                .append(separator)
-                .toString();
+        return "Bet #%d by %s, worth $%d, status: %s".formatted(betNumber, bettorName, betAmount, result);
     }
 }

@@ -2,10 +2,10 @@ package org.bets.types.parts;
 
 import org.bets.exceptions.TimeFormatException;
 
-public class BetTime {
+public class EventTime {
     private String hour, minutes;
 
-    public BetTime(String hour, String minutes) throws TimeFormatException {
+    public EventTime(String hour, String minutes) throws TimeFormatException {
         if (hour.length() != 2 || minutes.length() != 2) {
             throw new TimeFormatException("Errore nella lunghezza degli elementi! Segui il formato HHMM!");
         }
@@ -22,11 +22,11 @@ public class BetTime {
         return minutes;
     }
 
-    public static BetTime parseTime(String time) throws TimeFormatException {
+    public static EventTime parseTime(String time) throws TimeFormatException {
         var hour = time.substring(0, 2);
         var minutes = time.substring(2);
 
-        return new BetTime(hour, minutes);
+        return new EventTime(hour, minutes);
     }
 
     @Override

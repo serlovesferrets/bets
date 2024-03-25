@@ -2,111 +2,64 @@ package org.bets.builders;
 
 import org.bets.exceptions.*;
 import org.bets.types.Bet;
-import org.bets.types.parts.BetDate;
-import org.bets.types.parts.BetTime;
+import org.bets.types.BetResult;
 
 public class BetBuilder {
-    // reference types so they can be nullable
-    private Integer number;
-    private String eventName;
-    private BetDate date;
-    private BetTime time;
-    private Float caseFirst, caseEven, caseSecond;
+    private Integer betNumber;
+    private String bettorName;
+    private Integer betAmount;
+    private BetResult result;
 
-    public BetBuilder number(int number) throws NumberTooLongException {
-        if (number > 99999) {
-            throw new NumberTooLongException("Numero troppo lungo: %d (max 5 cifre)".formatted(number));
+    public BetBuilder betNumber(int betNumber) {
+        this.betNumber = betNumber;
+        return this;
+    }
+
+    public BetBuilder bettorName(String bettorName) throws BettorNameTooLongException {
+        if (bettorName.length() > 15) {
+            throw new BettorNameTooLongException("Bettor name was longer than 15! Got: %s with length %d"
+                    .formatted(bettorName, bettorName.length()));
         }
 
-        this.number = number;
+        this.bettorName = bettorName;
         return this;
     }
 
-    public BetBuilder eventName(String eventName) throws EventNameTooLongException {
-        if (eventName.length() > 20) {
-            throw new EventNameTooLongException("Nome dell'evento troppo lungo (max 20 caratteri)");
+    public BetBuilder betAmount(int betAmount) throws BetNotInRangeException {
+        if (betAmount < 10 || betAmount > 100) {
+            throw new BetNotInRangeException(
+                    "Bet amount was supposed to be in range [10, 100], got %d".formatted(betAmount));
         }
 
-        this.eventName = eventName;
+        this.betAmount = betAmount;
         return this;
     }
 
-    public BetBuilder date(String year, String month, String date) throws DateFormatException {
-        this.date = new BetDate(year, month, date);
-        return this;
-    }
-
-    public BetBuilder date(BetDate date) {
-        this.date = date;
-        return this;
-    }
-
-    public BetBuilder time(String hour, String minutes) throws TimeFormatException {
-        this.time = new BetTime(hour, minutes);
-        return this;
-    }
-
-    public BetBuilder time(BetTime time) {
-        this.time = time;
-        return this;
-    }
-
-    public void checkAmountLength(float number, int maxLength, String amountName) throws AmountTooLongException {
-        if (Float.toString(caseFirst).length() > maxLength) {
-            throw new AmountTooLongException(
-                    "%s troppo lungo: %.2f (max: %d)".formatted(amountName, number, maxLength));
+    public BetBuilder betResult(char result) throws ResultFormatException {
+        if (result == '1') {
+            this.result = BetResult.ONE;
+        } else if (result == '2') {
+            this.result = BetResult.TWO;
+        } else if (result == 'X' || result == 'x') {
+            this.result = BetResult.EVEN;
+        } else {
+            throw new ResultFormatException("Result must be one of 1 | 2 | X, got %c!".formatted(result));
         }
-    }
 
-    public BetBuilder caseFirst(float caseFirst) throws AmountTooLongException {
-        checkAmountLength(caseFirst, 5, "Quota 1");
-        this.caseFirst = caseFirst;
-        return this;
-    }
-
-    public BetBuilder caseEven(float caseEven) throws AmountTooLongException {
-        checkAmountLength(caseSecond, 5, "Quota X");
-        this.caseEven = caseEven;
-        return this;
-    }
-
-    public BetBuilder caseSecond(float caseSecond) throws AmountTooLongException {
-        checkAmountLength(caseSecond, 5, "Quota 2");
-        this.caseSecond = caseSecond;
         return this;
     }
 
     public Bet build() throws MissingBuilderFieldException {
-        if (number == null || eventName == null || date == null || time == null
-                || caseFirst == null || caseEven == null
-                || caseSecond == null) {
-            throw new MissingBuilderFieldException("""
-                                  One or more fields was null! Status:
-                                  - number: %d,
-                                  - eventName: %s,
-                                  - date: %s,
-                                  - time: %s,
-                                  - caseFirst: %.2f,
-                                  - caseEven: %.2f,
-                                  - caseSecond: %.2f
-                    """.formatted(number, eventName, date.toString(),
-                    time.toString(), caseFirst, caseEven, caseSecond));
+        if (bettorName == null || betAmount == null || result == null) {
+            var message = """
+                        At least one of the fields were null! Status:
+                        - bettorName: %s
+                        - betAmount: %s
+                        - result: %s
+                    """.formatted(bettorName, betAmount.toString(), result.toString());
+            throw new MissingBuilderFieldException(message);
         }
-        BetBuilder builder = null;
-        try {
-            builder = new BetBuilder()
-                    .number(number)
-                    .eventName(eventName)
-                    .date(date)
-                    .time(time)
-                    .caseFirst(caseFirst)
-                    .caseEven(caseEven)
-                    .caseSecond(caseSecond);
-        } catch (AmountTooLongException | EventNameTooLongException | NumberTooLongException e) {
-            // This will literally never happen
-            e.printStackTrace();
-            System.exit(1);
-        }
-        return builder.build();
+
+        return new Bet(betNumber, bettorName, betAmount, result);
     }
 }

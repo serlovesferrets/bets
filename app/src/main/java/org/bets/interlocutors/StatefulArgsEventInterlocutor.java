@@ -1,18 +1,18 @@
-package org.bets.interlocutor;
+package org.bets.interlocutors;
 
-import org.bets.builders.BetBuilder;
+import org.bets.builders.EventBuilder;
 import org.bets.exceptions.AmountTooLongException;
 import org.bets.exceptions.DateFormatException;
 import org.bets.exceptions.EventNameTooLongException;
 import org.bets.exceptions.MissingBuilderFieldException;
 import org.bets.exceptions.NumberTooLongException;
 import org.bets.exceptions.TimeFormatException;
-import org.bets.types.Bet;
-import org.bets.types.parts.BetDate;
-import org.bets.types.parts.BetTime;
+import org.bets.types.Event;
+import org.bets.types.parts.EventDate;
+import org.bets.types.parts.EventTime;
 
-public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgsBetInterlocutor> {
-    public StatefulArgsBetInterlocutor(String[] args) throws DateFormatException, TimeFormatException {
+public class StatefulArgsEventInterlocutor implements EventInterlocutor<StatefulArgsEventInterlocutor> {
+    public StatefulArgsEventInterlocutor(String[] args) throws DateFormatException, TimeFormatException {
         // index 0 is the opt
         numberStr = args[1];
         eventNameStr = args[2];
@@ -23,7 +23,7 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
         caseSecondStr = args[7];
     }
 
-    private final BetBuilder builder = new BetBuilder();
+    private final EventBuilder builder = new EventBuilder();
 
     private final String numberStr;
     private final String eventNameStr;
@@ -34,13 +34,13 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
     private final String caseSecondStr;
 
     @Override
-    public StatefulArgsBetInterlocutor askDate() throws DateFormatException {
-        builder.date(BetDate.parseDate(dateStr));
+    public StatefulArgsEventInterlocutor askDate() throws DateFormatException {
+        builder.date(EventDate.parseDate(dateStr));
         return this;
     }
 
     @Override
-    public StatefulArgsBetInterlocutor askFirstCase() throws AmountTooLongException, NumberFormatException {
+    public StatefulArgsEventInterlocutor askFirstCase() throws AmountTooLongException, NumberFormatException {
         if (caseFirstStr.length() > 5) {
             throw new AmountTooLongException(
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 5! (Caso 1)"
@@ -52,7 +52,7 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
     }
 
     @Override
-    public StatefulArgsBetInterlocutor askEvenCase() throws AmountTooLongException, NumberFormatException {
+    public StatefulArgsEventInterlocutor askEvenCase() throws AmountTooLongException, NumberFormatException {
         if (caseEvenStr.length() > 5) {
             throw new AmountTooLongException(
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 5! (Caso X)"
@@ -63,7 +63,7 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
     }
 
     @Override
-    public StatefulArgsBetInterlocutor askSecondCase() throws AmountTooLongException, NumberFormatException {
+    public StatefulArgsEventInterlocutor askSecondCase() throws AmountTooLongException, NumberFormatException {
         if (caseSecondStr.length() > 5) {
             throw new AmountTooLongException(
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 5! (Caso 2)"
@@ -74,7 +74,7 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
     }
 
     @Override
-    public StatefulArgsBetInterlocutor askName() throws EventNameTooLongException {
+    public StatefulArgsEventInterlocutor askName() throws EventNameTooLongException {
         if (eventNameStr.length() > 20) {
             throw new EventNameTooLongException(
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 20! (nome evento)"
@@ -85,7 +85,7 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
     }
 
     @Override
-    public StatefulArgsBetInterlocutor askNumber() throws NumberTooLongException, NumberFormatException {
+    public StatefulArgsEventInterlocutor askNumber() throws NumberTooLongException, NumberFormatException {
         if (numberStr.length() > 5) {
             throw new NumberTooLongException(
                     "La lunghezza di %d per il numero è troppo alta rispetto al massimo di 5! (Caso 2)"
@@ -97,13 +97,13 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
     }
 
     @Override
-    public StatefulArgsBetInterlocutor askTime() throws TimeFormatException {
-        builder.time(BetTime.parseTime(timeStr));
+    public StatefulArgsEventInterlocutor askTime() throws TimeFormatException {
+        builder.time(EventTime.parseTime(timeStr));
         return this;
     }
 
     @Override
-    public Bet build() throws MissingBuilderFieldException {
+    public Event build() throws MissingBuilderFieldException {
         return builder.build();
     }
 }

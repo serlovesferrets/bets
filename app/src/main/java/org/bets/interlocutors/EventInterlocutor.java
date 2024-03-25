@@ -1,6 +1,6 @@
-package org.bets.interlocutor;
+package org.bets.interlocutors;
 
-import org.bets.types.Bet;
+import org.bets.types.Event;
 import org.bets.exceptions.*;
 
 /* Using an interface as i ~~can't get gradle run to use stdin for input~~
@@ -17,7 +17,7 @@ import org.bets.exceptions.*;
  * the interface; this also allows the builder to preserve its type on inheritance
  * (see https://www.baeldung.com/java-builder-pattern-inheritance#solution-with-generics)
  */
-public interface BetInterlocutor<T extends BetInterlocutor<T>> {
+public interface EventInterlocutor<T extends EventInterlocutor<T>> {
     T askNumber() throws NumberTooLongException;
 
     T askName() throws EventNameTooLongException;
@@ -32,5 +32,5 @@ public interface BetInterlocutor<T extends BetInterlocutor<T>> {
 
     T askSecondCase() throws AmountTooLongException;
 
-    Bet build() throws MissingBuilderFieldException, DateFormatException, TimeFormatException;
+    Event build() throws MissingBuilderFieldException, DateFormatException, TimeFormatException;
 }
