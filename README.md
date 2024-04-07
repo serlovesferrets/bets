@@ -43,6 +43,11 @@ Anzitutto, non dimenticarsi di eseguire `chmod +x entry`.
 # Mostra gli ID degli eventi prima di farli scegliere!
 ./entry fake $COUNT
 
+# Restituisce i vari dati richiesti dalla consegna.
+# Chiede prima (in maniera interattiva) il codice dell'evento.
+# Per favore, controllare che esistano delle scommesse per quell'evento!
+./entry analyze
+
 # Chiama `gradle run`, passando $ARGS nella flag `args`.
 ./entry raw $ARGS
 ```
