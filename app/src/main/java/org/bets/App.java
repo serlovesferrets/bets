@@ -15,6 +15,7 @@ import org.bets.types.BetResult;
 import org.bets.types.Event;
 
 import org.bets.interlocutors.*;
+import org.bets.phase2.Elaborator;
 import org.bets.phase2.Simulator;
 
 public class App {
@@ -86,6 +87,10 @@ public class App {
 
         Bet bet = builder.build();
 
+        addBet(bet);
+    }
+
+    public static void addBet(Bet bet) throws FileNotFoundException {
         try (final var outputStream = new PrintWriter(new FileOutputStream(betsFile, true))) {
             outputStream.println(bet.serialized());
         }
@@ -146,10 +151,17 @@ public class App {
         return new Simulator(times, id);
     }
 
+    private static Elaborator createElaborator(String[] args) throws EventDoesNotExistException {
+        var id = Integer.parseInt(args[1]);
+
+        var pair = data.getDataById(id);
+        return new Elaborator(pair.getRight(), pair.getLeft());
+    }
+
     public static void main(String[] args)
             throws TooLongException, IOException, DateFormatException, TimeFormatException, NumberFormatException,
             DuplicateEventException, MissingBuilderFieldException, ResultFormatException, BetNotInRangeException,
-            BetNotFoundException, EventDoesNotExistException {
+            BetNotFoundException, EventDoesNotExistException, UnreachableCode {
         eventsFile.createNewFile();
         betsFile.createNewFile();
 
@@ -195,9 +207,18 @@ public class App {
                 getAllEventIds().forEach(System.out::println);
                 break;
 
-            case "simulation":
+            case "get-aids":
+                System.out.println("😭");
+                break;
+
+            case "simulate":
                 var simulator = createSimulator(args);
-                System.out.println("created with succ(ess)");
+                simulator.run();
+                break;
+
+            case "elaborate":
+                var elaborator = createElaborator(args);
+                elaborator.run();
                 break;
 
             default:

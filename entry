@@ -63,7 +63,7 @@ showIds() {
   gradle run -q --args='get-ids'
 }
 
-queryId() {
+simulate() {
   times=$1
   numbers=$(showIds)
 
@@ -79,12 +79,33 @@ queryId() {
   
   if echo "$numbers" | grep -q "$choice"; then
     echo "Running simulation $times times on event #$choice..."
-    gradle run --args="simulation $times $choice"
+    gradle run --args="simulate $times $choice"
   else
     echo "Non tra i numeri!"
   fi
 }
 
+elaborate() {
+  numbers=$(showIds)
+
+  if [ -z "$numbers" ]; then
+    echo "Non hai ancora inserito alcun evento!"
+    exit 1
+  fi
+
+  echo "Eventi trovati:"
+  echo "$numbers" 
+  
+  read -p "Quale vuoi scegliere? " choice
+  
+  if echo "$numbers" | grep -q "$choice"; then
+    echo "Elaborating..."
+    gradle run --args="elaborate $choice"
+  else
+    echo "Non tra i numeri!"
+  fi
+
+}
 
 case "$command" in
   add-event)
@@ -132,12 +153,20 @@ case "$command" in
     cleanBets
     ;;
 
-  query)
-    queryId $2
+  fake)
+    simulate $2
+    ;;
+
+  analyze)
+    elaborate
     ;;
 
   ids)
     showIds
+    ;;
+
+  raw)
+    gradle run --args="$2"
     ;;
 
   *)

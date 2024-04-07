@@ -49,6 +49,11 @@ public class BetBuilder {
         return this;
     }
 
+    public BetBuilder betResult(BetResult result) {
+        this.result = result;
+        return this;
+    }
+
     public Bet build() throws MissingBuilderFieldException {
         if (bettorName == null || betAmount == null || result == null) {
             var message = """
