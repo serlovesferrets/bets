@@ -15,6 +15,7 @@ import org.bets.types.BetResult;
 import org.bets.types.Event;
 
 import org.bets.interlocutors.*;
+import org.bets.phase2.Simulator;
 
 public class App {
     static final String eventsFileName = "betting.dat";
@@ -139,6 +140,12 @@ public class App {
         System.out.println("Budget: %.2f".formatted(total));
     }
 
+    public static Simulator createSimulator(String[] args) {
+        var times = Integer.parseInt(args[1]);
+        var id = Integer.parseInt(args[2]);
+        return new Simulator(times, id);
+    }
+
     public static void main(String[] args)
             throws TooLongException, IOException, DateFormatException, TimeFormatException, NumberFormatException,
             DuplicateEventException, MissingBuilderFieldException, ResultFormatException, BetNotInRangeException,
@@ -188,8 +195,13 @@ public class App {
                 getAllEventIds().forEach(System.out::println);
                 break;
 
+            case "simulation":
+                var simulator = createSimulator(args);
+                System.out.println("created with succ(ess)");
+                break;
+
             default:
-                System.out.println("Command not found!");
+                System.out.println("Comando invalido! Ti direi di leggere la manpage, ma non ne ho fatta una. Oops.");
         }
     }
 }
