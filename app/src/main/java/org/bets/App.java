@@ -90,9 +90,16 @@ public class App {
         }
     }
 
+    public static ArrayList<Integer> getAllEventIds() {
+        var res = data.getEvents().stream().map(Event::getNumber).toList();
+        return new ArrayList<>(res);
+    }
+
     public static void showBetData(String[] args) throws EventDoesNotExistException {
         if (args.length < 3) {
-            System.out.println("Need a number and one of '1', '2' or 'x'!");
+            System.out.println("Need a number and one of '1', '2' or 'X'!");
+            System.out.println("Arg 1: '" + args[1] + "' (should be a number)");
+            System.out.println("Arg 2: '" + args[2] + "' (should be '1', '2' or 'X')");
             System.exit(1);
         }
 
@@ -148,41 +155,41 @@ public class App {
 
         var opt = args[0];
 
-        if (opt.equals("clean-events")) {
-            eventsFile.delete();
-            return;
-        }
+        switch (opt) {
+            case "clean-events":
+                eventsFile.delete();
+                break;
 
-        if (opt.equals("clean-bets")) {
-            betsFile.delete();
-            return;
-        }
+            case "clean-bets":
+                betsFile.delete();
+                break;
 
-        if (opt.equals("add-event")) {
-            addEvent(args);
-            return;
-        }
+            case "add-event":
+                addEvent(args);
+                break;
 
-        if (opt.equals("add-bet")) {
-            addBet(args);
-            return;
-        }
+            case "add-bet":
+                addBet(args);
+                break;
 
-        if (opt.equals("show-events")) {
-            data.getEvents().forEach(System.out::println);
-            return;
-        }
+            case "show-events":
+                data.getEvents().forEach(System.out::println);
+                break;
 
-        if (opt.equals("show-bets")) {
-            data.getBets().forEach(System.out::println);
-            return;
-        }
+            case "show-bets":
+                data.getBets().forEach(System.out::println);
+                break;
 
-        if (opt.equals("get-bet")) {
-            showBetData(args);
-            return;
-        }
+            case "get-bet":
+                showBetData(args);
+                break;
 
-        System.out.println("Command not found!");
+            case "get-ids":
+                getAllEventIds().forEach(System.out::println);
+                break;
+
+            default:
+                System.out.println("Command not found!");
+        }
     }
 }

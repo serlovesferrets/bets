@@ -8,12 +8,12 @@ fi
 command=$1
 
 events=(
-    "1254 first-event 06042023 0815 1.50 1.40 1.45"
-    "4562 second-event 02032024 0912 2.00 1.50 2.50"
-    "7896 third-event 11252025 1030 3.00 2.50 1.75"
-    "2357 fourth-event 07212024 1345 1.10 3.00 2.00"
-    "7412 fifth-event 03152024 1000 2.50 2.00 3.00"
-    "3698 sixth-event 09012023 1430 4.00 3.50 1.10"
+  "1254 first-event 06042023 0815 1.50 1.40 1.45"
+  "4562 second-event 02032024 0912 2.00 1.50 2.50"
+  "7896 third-event 11252025 1030 3.00 2.50 1.75"
+  "2357 fourth-event 07212024 1345 1.10 3.00 2.00"
+  "7412 fifth-event 03152024 1000 2.50 2.00 3.00"
+  "3698 sixth-event 09012023 1430 4.00 3.50 1.10"
 )
 
 bets=(
@@ -23,7 +23,7 @@ bets=(
   "2357 feliz-navidad 30 X"
   "2357 mina 40 2"
   "4562 chatgpt 60 2"
-  "7896 simone-ciniltani 90 1" 
+  "7896 simone-ciny 90 1" 
   "4562 franceschino 55 1"
 )
 
@@ -58,6 +58,31 @@ showBets() {
 showBet() {
   gradle run --args="get-bet $1 $2"
 }
+
+showIds() {
+  gradle run -q --args='get-ids'
+}
+
+queryId() {
+  numbers=$(showIds)
+
+  if [ -z "$numbers" ]; then
+    echo "Non hai ancora inserito alcun evento!"
+    exit 1
+  fi
+
+  echo "Eventi trovati:"
+  echo "$numbers" 
+  
+  read -p "Quale vuoi scegliere? " choice
+  
+  if echo "$numbers" | grep -q "$choice"; then
+    echo "You chose $choice"
+  else
+    echo "Scelta invalida!"
+  fi
+}
+
 
 case "$command" in
   add-event)
@@ -103,6 +128,14 @@ case "$command" in
   clean)
     cleanEvents
     cleanBets
+    ;;
+
+  query)
+    queryId
+    ;;
+
+  ids)
+    showIds
     ;;
 
   *)
