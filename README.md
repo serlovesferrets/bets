@@ -1,49 +1,48 @@
-# Part 1
+# Gambling
 
-Build an application that allows you to create bets, enter bets and provide
-statistics on earnings / losses.
+Questa è un'applicazione in Java scritta per educazione civica. Permette di salvare delle informazioni su delle scommesse localemente, e ho scritto uno shell script chiamato `entry` per facilitare l'intereazione (immagino dover scrivere `gradle run --args='<args>` per ogni comando possa diventare scomodo in fretta, vero?).
 
-## 1. Creating a bet
+## Ma come dovrei usare `entry`?
 
-Ask the user for data on:
+Anzitutto, non dimenticarsi di eseguire `chmod +x entry`.
 
-- number integer(5) 
-- event name string(20) 
-- date string(8) (YYYMMDD format)
-- time string(4) (HHMM format)
-- quota 1 float(5)
-- quota X float(5)
-- quota 2 float(5)
+```sh
+# Aggiunge UN solo evento predeterminato.
+./entry add-event 
 
-Check the data and add a record to a `betting.dat` file
+# Aggiunge UNA sola scommessa predeterminata.
+./entry add-bet 
 
-## 2. Acceptance of a bet
+# Aggiunge vari eventi predeterminati.
+./entry add-events 
 
-The user enters the number of the event (check that exists in the betting file),
-the name of the bettor - string(15), the amount of the bet (from 10 to 100 euros
-- integer(3)) and the result (1-X-2– string(1)).
+# Aggiunge varie scommesse predeterminate.
+./entry add-bets 
 
-The data is added to the "amounts.dat" file
+# Mostra gli eventi.
+./entry show-events 
 
-## 3. Bet Closure
+# Mostra le scommesse.
+./entry show-bets 
 
-The user enters the event number (check that it exists in the betting file) and
-the result; the system reads the amounts file searching for wagers related to
-the event and displays them in a list with the name of the bettor, the expected
-result and the amount earned / lost by the organization.  At the bottom is
-showed the budget (sum of the amounts earned / lost).
+# Elimina il file `betting.dat`.
+./entry clean-events 
 
-## Example
+# Elimina il file `amounts.dat`.
+./entry clean-bets 
 
-Event 1 is terminated with the result X; bettor 1 made a bet of 80 € on result 1
-(earn) while bettor 2 made a bet of 70€ on result X (loss); the X quote was
-2.70. The list displays the following data:
+# clean-events && clean-bets.
+./entry clean 
 
-| Name    | Amount | Result | Earn / Loss |
-| :-----: | :----: | :----: | :---------: |
-| bettor1 | 80     | 1      | +80         |
-| bettor2 | 70     | X      | -119        |
+# Mostra le informazioni dell'evento $EVENT_ID (numero) dato un $RESULT.
+# Il $RESULT deve essere uno dei seguenti: 1, X (case insensitive), 2.
+# Mostrerà anche il budget risultante.
+./entry bet $EVENT_ID $RESULT 
 
-Budget: -39€ (the organization has a loss of 39€)
+# Crea $COUNT (numero) false scommesse tramite il simulatore.
+# Mostra gli ID degli eventi prima di farli scegliere!
+./entry fake $COUNT
 
-The loss is given by: amount * quote - amount
+# Chiama `gradle run`, passando $ARGS nella flag `args`.
+./entry raw $ARGS
+```
