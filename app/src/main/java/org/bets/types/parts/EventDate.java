@@ -28,19 +28,22 @@ public class EventDate {
     }
 
     public static EventDate parseDate(String date) throws DateFormatException {
-        var year = date.substring(0, 4);
-        var month = date.substring(4, 6);
-        var day = date.substring(6);
+        var year = date.substring(4);
+        var month = date.substring(2, 4);
+        var day = date.substring(0, 2);
 
         return new EventDate(year, month, day);
     }
 
     @Override
     public String toString() {
-        return "%s%s%s".formatted(year, month, day);
+        return "%s%s%s".formatted(day, month, year);
     }
 
     public String prettyString() {
-        return "%s %s %s".formatted(year, month, day);
+        System.out.println("Year: " + year);
+        System.out.println("Month: " + month);
+        System.out.println("Day: " + day);
+        return "%s/%s/%s".formatted(day, month, year);
     }
 }

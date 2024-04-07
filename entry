@@ -1,0 +1,112 @@
+#!/bin/sh
+
+if [ $# -lt 1 ]; then
+  echo "Devi passare almeno un argomento!"
+  exit 1
+fi
+
+command=$1
+
+events=(
+    "1254 first-event 06042023 0815 1.50 1.40 1.45"
+    "4562 second-event 02032024 0912 2.00 1.50 2.50"
+    "7896 third-event 11252025 1030 3.00 2.50 1.75"
+    "2357 fourth-event 07212024 1345 1.10 3.00 2.00"
+    "7412 fifth-event 03152024 1000 2.50 2.00 3.00"
+    "3698 sixth-event 09012023 1430 4.00 3.50 1.10"
+)
+
+bets=(
+  "1254 marzianito 50 X"
+  "3698 bingus-meow 25 1"
+  "7412 dame-tu-cosita 75 2"
+  "2357 feliz-navidad 30 X"
+  "2357 mina 40 2"
+  "4562 chatgpt 60 2"
+  "7896 simone-ciniltani 90 1" 
+  "4562 franceschino 55 1"
+)
+
+addEvent() {
+  index=$1
+  event=${events[$index]}
+  gradle run --args="add-event $event"
+}
+
+addBet() {
+  index=$1
+  bet=${bets[$index]}
+  gradle run --args="add-bet $bet"
+}
+
+cleanEvents() {
+  gradle run --args="clean-events"
+}
+
+cleanBets() {
+  gradle run --args="clean-bets"
+}
+
+showEvents() {
+  gradle run --args="show-events"  
+}
+
+showBets() {
+  gradle run --args="show-bets"
+}
+
+showBet() {
+  gradle run --args="get-bet $1 $2"
+}
+
+case "$command" in
+  add-event)
+    addEvent 0
+    ;;
+
+  add-events)
+    for i in $(seq 0 $((${#events[@]}-1))); do
+      addEvent $i
+    done
+    ;;
+
+  add-bet)
+    addBet 0
+    ;;
+
+  add-bets)  
+    for i in $(seq 0 $((${#bets[@]}-1))); do
+      addBet $i
+    done
+    ;;
+
+  show-events)
+    showEvents
+    ;;
+
+  show-bets)
+    showBets
+    ;;
+
+  bet)
+    showBet $2 $3
+    ;;
+
+  clean-events)
+    cleanEvents
+    ;;
+
+  clean-bets)
+    cleanBets
+    ;;
+
+  clean)
+    cleanEvents
+    cleanBets
+    ;;
+
+  *)
+    echo "Comando non riconosciuto!"
+    exit 1
+    ;;
+esac

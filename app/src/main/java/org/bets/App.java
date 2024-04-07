@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.bets.exceptions.*;
+import org.bets.functionality.ProgramDataSingleton;
 import org.bets.types.Bet;
+import org.bets.types.BetResult;
 import org.bets.types.Event;
 
 import org.bets.interlocutors.*;
@@ -21,8 +23,7 @@ public class App {
     static final String betsFileName = "amounts.dat";
     static final File betsFile = new File(betsFileName);
 
-    static ArrayList<Event> events = null;
-    static ArrayList<Bet> bets = null;
+    static ProgramDataSingleton data;
 
     public static ArrayList<Event> loadEvents() throws DateFormatException, TimeFormatException, IOException {
         var list = new ArrayList<Event>();
@@ -64,7 +65,7 @@ public class App {
 
         var bet = builder.build();
 
-        if (Event.numberExists(events, bet.getNumber())) {
+        if (Event.numberExists(data.getEvents(), bet.getNumber())) {
             throw new DuplicateEventException("L'evento on id #%d esiste già!".formatted(bet.getNumber()));
         }
 
@@ -76,7 +77,7 @@ public class App {
     public static void addBet(String[] args)
             throws NumberFormatException, BettorNameTooLongException, ResultFormatException, BetNotInRangeException,
             BetNotFoundException, FileNotFoundException, MissingBuilderFieldException {
-        var builder = new StatefulArgsBetInterlocutor(args, events)
+        var builder = new StatefulArgsBetInterlocutor(args, data.getEvents())
                 .askBetNumber()
                 .askBetAmount()
                 .askBettorName()
@@ -89,10 +90,52 @@ public class App {
         }
     }
 
+    public static void showBetData(String[] args) throws EventDoesNotExistException {
+        if (args.length < 3) {
+            System.out.println("Need a number and one of '1', '2' or 'x'!");
+            System.exit(1);
+        }
+
+        var id = Integer.parseInt(args[1]);
+        var resultChar = args[2].charAt(0);
+
+        var result = BetResult.fromChar(resultChar);
+
+        var pair = data.getDataById(id);
+        var event = pair.getLeft();
+        var bets = pair.getRight();
+
+        System.out.println(event);
+
+        var quote = switch (result) {
+            case ONE -> event.getCaseFirst();
+            case TWO -> event.getCaseSecond();
+            case EVEN -> event.getCaseEven();
+        };
+
+        var total = 0.0f;
+        for (var bet : bets) {
+            System.out.print(bet);
+            var betResult = bet.getResult();
+            var betAmount = bet.getBetAmount();
+
+            if (betResult != result) {
+                total += betAmount;
+                System.out.println(", -%d".formatted(betAmount));
+            } else {
+                var gained = betAmount * quote - betAmount;
+                total = total + gained;
+                System.out.println(", +%.2f".formatted(gained));
+            }
+        }
+
+        System.out.println("Budget: %.2f".formatted(total));
+    }
+
     public static void main(String[] args)
             throws TooLongException, IOException, DateFormatException, TimeFormatException, NumberFormatException,
             DuplicateEventException, MissingBuilderFieldException, ResultFormatException, BetNotInRangeException,
-            BetNotFoundException {
+            BetNotFoundException, EventDoesNotExistException {
         eventsFile.createNewFile();
         betsFile.createNewFile();
 
@@ -101,8 +144,7 @@ public class App {
             System.exit(1);
         }
 
-        events = loadEvents();
-        bets = loadBets();
+        data = new ProgramDataSingleton(loadEvents(), loadBets());
 
         var opt = args[0];
 
@@ -127,10 +169,17 @@ public class App {
         }
 
         if (opt.equals("show-events")) {
-            var bets = loadEvents();
-            for (var bet : bets) {
-                System.out.println(bet);
-            }
+            data.getEvents().forEach(System.out::println);
+            return;
+        }
+
+        if (opt.equals("show-bets")) {
+            data.getBets().forEach(System.out::println);
+            return;
+        }
+
+        if (opt.equals("get-bet")) {
+            showBetData(args);
             return;
         }
 

@@ -12,6 +12,7 @@ import org.bets.types.Bet;
 import org.bets.types.Event;
 
 // ALSO verify that, when you try to set a bet's number, the bet actually exists
+// DONE :D (im pretty sure)
 
 public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgsBetInterlocutor> {
     private ArrayList<Event> events;
@@ -26,9 +27,9 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
         this.events = events;
 
         betNumberStr = args[1];
-        betAmountStr = args[2];
-        betResultStr = args[3];
-        bettorNameStr = args[4];
+        bettorNameStr = args[2];
+        betAmountStr = args[3];
+        betResultStr = args[4];
     }
 
     @Override
@@ -45,6 +46,7 @@ public class StatefulArgsBetInterlocutor implements BetInterlocutor<StatefulArgs
 
     @Override
     public StatefulArgsBetInterlocutor askBetAmount() throws BetNotInRangeException {
+
         var amount = Integer.parseInt(betAmountStr);
         builder.betAmount(amount);
         return this;
