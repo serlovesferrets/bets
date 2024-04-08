@@ -41,9 +41,6 @@ public class EventDate {
     }
 
     public String prettyString() {
-        System.out.println("Year: " + year);
-        System.out.println("Month: " + month);
-        System.out.println("Day: " + day);
         return "%s/%s/%s".formatted(day, month, year);
     }
 }

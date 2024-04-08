@@ -207,10 +207,6 @@ public class App {
                 getAllEventIds().forEach(System.out::println);
                 break;
 
-            case "get-aids":
-                System.out.println("😭");
-                break;
-
             case "simulate":
                 var simulator = createSimulator(args);
                 simulator.run();
